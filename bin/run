@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec xvfb-run java -jar /opt/selenium/standalone.jar
