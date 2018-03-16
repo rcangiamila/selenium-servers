@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+    openshift.io/image.dockerRepositoryCheck: 2018-02-16T09:06:35Z
+  creationTimestamp: null
+  generation: 2
+  labels:
+    app: ci-base
+  name: jenkins-2-rhel7
+spec:
+  tags:
+  - annotations:
+      openshift.io/imported-from: registry.access.redhat.com/openshift3/jenkins-2-rhel7
+    from:
+      kind: DockerImage
+      name: 172.30.0.128:5000/selenium-test-partec/jenkins-2-rhel7
+    generation: 2
+    importPolicy: {}
+    name: latest
+status:
+  dockerImageRepository: ""
