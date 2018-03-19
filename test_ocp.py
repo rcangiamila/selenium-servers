@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+import os
 
 def test_selenium():
     profile = webdriver.FirefoxProfile()
@@ -44,8 +45,9 @@ def test_remote1():
     capabilities['marionette'] = True
     #capabilities['platform'] = "WINDOWS"
     #capabilities['version'] = "7"
-
-    driver = webdriver.Remote(command_executor='http://sel01:4444/wd/hub',desired_capabilities=capabilities)
+    host = os.environ['SELENIUM_SERVERS_SERVICE_HOST']
+    port = os.environ['SELENIUM_SERVERS_SERVICE_PORT']
+    driver = webdriver.Remote(command_executor='http://' + host + ':' + port + '/wd/hub',desired_capabilities=capabilities)
     driver.get("http://www.python.org")
     assert "Python" in driver.title
 
