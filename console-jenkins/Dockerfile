@@ -10,11 +10,10 @@ USER root
 RUN yum install -y epel-release
 
 RUN yum install -y wget && \
-    yum install -y bzip2
+    yum install -y bzip2 && \
+    yum install -y python-pip
 
-RUN curl https://bootstrap.pypa.io/get-pip.py -o /var/lib/jenkins/get-pip.py && \
-    python /var/lib/jenkins/get-pip.py && \
-    pip install virtualenv && \
+RUN pip install virtualenv && \
     pip install virtualenvwrapper
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins
