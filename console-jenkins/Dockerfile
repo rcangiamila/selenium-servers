@@ -16,6 +16,8 @@ RUN yum install -y python-pip
 RUN yum install -y wget && \
     yum install -y bzip2
 
+RUN rm -rf /usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches/*
+
 RUN pip install --upgrade pip && \
     pip install virtualenv && \
     pip install virtualenvwrapper
