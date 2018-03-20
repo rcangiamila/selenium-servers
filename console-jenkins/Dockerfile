@@ -23,7 +23,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o /var/lib/jenkins/get-pip.py && 
 
 RUN pip install --no-cache-dir virtualenv
 
-RUN pip install --no-cache-dir virtualenvwrapper
+RUN pip install --no-cache-dir --ignore-installed virtualenvwrapper
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins
 
