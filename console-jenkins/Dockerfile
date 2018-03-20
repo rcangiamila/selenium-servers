@@ -7,6 +7,8 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 USER root
 
+RUN yum install -y epel-release
+
 RUN yum install -y wget && \
     yum install -y bzip2
 
