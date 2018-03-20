@@ -13,7 +13,8 @@ RUN yum install -y wget && \
     yum install -y bzip2 && \
     yum install -y python-pip
 
-RUN pip install virtualenv && \
+RUN pip install --upgrade pip && \
+    pip install virtualenv && \
     pip install virtualenvwrapper
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins
