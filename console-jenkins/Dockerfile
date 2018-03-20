@@ -7,11 +7,14 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 USER root
 
+RUN yum -y update
 RUN yum install -y epel-release
+RUN yum install -y python
+RUN yum install -y python-requests
+RUN yum install -y python-pip
 
 RUN yum install -y wget && \
-    yum install -y bzip2 && \
-    yum install -y python-pip
+    yum install -y bzip2
 
 RUN pip install --upgrade pip && \
     pip install virtualenv && \
