@@ -19,7 +19,7 @@ RUN yum install -y wget && \
 RUN curl https://bootstrap.pypa.io/get-pip.py -o /var/lib/jenkins/get-pip.py && \
     python /var/lib/jenkins/get-pip.py --no-cache-dir
 
-RUN pip install --upgrade --no-cache-dir pip
+#RUN pip install --upgrade --no-cache-dir pip
 
 RUN pip install --no-cache-dir virtualenv
 
