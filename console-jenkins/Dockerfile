@@ -17,7 +17,7 @@ RUN yum install -y wget && \
     yum install -y bzip2 && \
     yum clean all
 
-#RUN rm -rf /usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches/*
+RUN rm -rf /usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches/*
 
 RUN pip install --upgrade --no-cache-dir pip
 
