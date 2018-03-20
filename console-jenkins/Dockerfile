@@ -19,9 +19,11 @@ RUN yum install -y wget && \
 
 #RUN rm -rf /usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches/*
 
-#RUN pip install --upgrade pip && \
-RUN pip install virtualenv && \
-    pip install virtualenvwrapper
+RUN pip install --upgrade pip
+
+RUN pip install virtualenv
+
+RUN pip install virtualenvwrapper
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins
 
