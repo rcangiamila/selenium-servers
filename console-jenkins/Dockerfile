@@ -5,8 +5,8 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 # Strumenti di sistema  #
 #-----------------------#
 
-RUN curl https://bootstrap.pypa.io/get-pip.py -o /home/get-pip.py && \
-    python /home/get-pip.py && \
+RUN curl https://bootstrap.pypa.io/get-pip.py -o /var/lib/jenkins/get-pip.py && \
+    python /var/lib/jenkins/get-pip.py && \
     pip install virtualenv && \
     pip install virtualenvwrapper &&  \
     yum install -y wget && \
