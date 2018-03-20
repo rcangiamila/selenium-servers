@@ -5,12 +5,12 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 # Strumenti di sistema  #
 #-----------------------#
 
+USER root
+
 RUN yum install -y wget && \
     yum install -y bzip2
 
 RUN wget --no-verbose https://bootstrap.pypa.io/get-pip.py -O /var/lib/jenkins/get-pip.py && \
-
-USER root
 
 RUN python /var/lib/jenkins/get-pip.py && \
     pip install virtualenv && \
