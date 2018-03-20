@@ -1,5 +1,5 @@
 FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
-USER root
+#USER root
 
 #-----------------------#
 # Strumenti di sistema  #
