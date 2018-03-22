@@ -64,7 +64,8 @@ ADD release.version /tmp/release.version
 
 # Remove the base-plugins.txt file because it's only used for Centos
 # and its presence in the rhel image is confusing.
-RUN rm /opt/openshift/base-plugins.txt && \ 
+RUN /usr/local/bin/install-plugins.sh /opt/openshift/base-plugins.txt && \
+    rm /opt/openshift/base-plugins.txt && \ 
     mkdir -p /opt/openshift/plugins && \
     # we symlink the rpm installed plugins from /usr/lib/jenkins to /opt/openshift/plugins so that
     # future upgrades of the image and their RPM install automatically get picked by jenkins;
