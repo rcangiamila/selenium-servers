@@ -29,6 +29,6 @@ RUN /usr/local/bin/fix-permissions /var/lib/jenkins && \
 VOLUME ["/var/lib/jenkins"]
 
 USER 1001
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
 CMD ["/usr/libexec/s2i/run"]
 
