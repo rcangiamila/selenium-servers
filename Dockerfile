@@ -14,7 +14,8 @@ ENV HOME=${APP_HOME}
 ENV PATH=$PATH:${APP_HOME}/bin
 
 ENV GECKO_DRIVER_URL=https://github.com/mozilla/geckodriver/releases/download/v0.20.0/geckodriver-v0.20.0-linux64.tar.gz
-ENV CHROME_URL=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+#ENV CHROME_URL=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+ENV CHROME_URL=http://dist.control.lth.se/public/CentOS-7/x86_64/google.x86_64/Packages/google-chrome-stable-64.0.3282.186-1.x86_64.rpm
 ENV SELENIUM_URL=https://selenium-release.storage.googleapis.com/3.11/selenium-server-standalone-3.11.0.jar
 ENV FIREFOX_URL=https://download-installer.cdn.mozilla.net/pub/firefox/releases/59.0/linux-x86_64/en-US/firefox-59.0.tar.bz2
 
