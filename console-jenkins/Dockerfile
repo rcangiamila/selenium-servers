@@ -1,11 +1,8 @@
-FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
-
-
-#-----------------------#
-# Strumenti di sistema  #
-#-----------------------#
+FROM openshift/origin/jenkins-2-centos7
 
 USER root
+
+EXPOSE 8080 50000
 
 RUN yum install -y epel-release
 RUN yum install -y wget && \
@@ -20,10 +17,6 @@ RUN pip install --no-cache-dir virtualenv
 RUN pip install --no-cache-dir --ignore-installed virtualenvwrapper
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins
-
-# &&  \
-#    yum install -y wget && \
-#    yum install -y bzip2
 
 VOLUME ["/var/lib/jenkins"]
 
