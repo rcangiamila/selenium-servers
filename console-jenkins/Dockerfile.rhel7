@@ -71,7 +71,7 @@ RUN /usr/local/bin/install-plugins.sh /opt/openshift/base-plugins.txt && \
     # future upgrades of the image and their RPM install automatically get picked by jenkins;
     # we use symlinks vs. actual files to delineate whether the user has overridden a plugin (and
     # by extension taken over its future maintenance)
-    for FILENAME in /usr/lib/jenkins/*hpi ; do ln -s $FILENAME /opt/openshift/plugins/`basename $FILENAME .hpi`.jpi; done &&\
+    for FILENAME in /var/lib/jenkins/*hpi ; do ln -s $FILENAME /opt/openshift/plugins/`basename $FILENAME .hpi`.jpi; done &&\
     chmod 775 /etc/passwd && \
     chmod -R 775 /etc/alternatives && \
     chmod -R 775 /var/lib/alternatives && \
@@ -110,7 +110,7 @@ RUN /usr/local/bin/install-plugins.sh /opt/openshift/base-plugins.txt && \
     /usr/local/bin/fix-permissions /opt/openshift && \
     chown -R 1001:0 /opt/openshift && \
     # the prior chown doesn't traverse the /opt/openshift/plugins links .. this one will assist fix-permission/assemble for extension builds like master/slave
-    chown 1001:0 /usr/lib/jenkins/*hpi && \ 
+    chown 1001:0 /var/lib/jenkins/*hpi && \ 
     /usr/local/bin/fix-permissions /opt/openshift/configuration/init.groovy.d && \
     /usr/local/bin/fix-permissions /var/lib/jenkins && \
     /usr/local/bin/fix-permissions /var/log
