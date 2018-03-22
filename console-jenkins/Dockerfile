@@ -4,6 +4,7 @@ USER root
 
 EXPOSE 8080 50000
 
+RUN yum install -y epel-release
 RUN yum install -y wget && \
     yum install -y bzip2 && \
     yum clean all
