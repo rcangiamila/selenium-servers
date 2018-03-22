@@ -22,8 +22,6 @@ ADD release.version /tmp/release.version
 
 RUN /usr/local/bin/fix-permissions /var/lib/jenkins && \
     chown -R 1001:0 /opt/openshift && \
-    # the prior chown doesn't traverse the /opt/openshift/plugins links .. this one will assist fix-permission/assemble for extension builds like master/slave
-    chown 1001:0 /usr/lib/jenkins/*hpi && \
     /usr/local/bin/fix-permissions /opt/openshift/configuration/init.groovy.d && \
     /usr/local/bin/fix-permissions /var/lib/jenkins && \
     /usr/local/bin/fix-permissions /var/log
