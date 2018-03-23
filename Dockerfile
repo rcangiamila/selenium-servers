@@ -46,6 +46,7 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chown -R 1001:0 ${GOOGLE_HOME} && \
+    chown root:root ${GOOGLE_HOME}/chrome/chrome-sandbox && \
     chmod 4755 ${GOOGLE_HOME}/chrome/chrome-sandbox && \
     chmod -R g=u /etc/passwd && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
