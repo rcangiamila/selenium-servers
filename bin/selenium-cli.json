@@ -1,11 +1,11 @@
-"desiredCapabilities" : {
-  "browserName" : "chrome",
-  "javascriptEnabled" : true,
-  "acceptSslCerts" : true,
-  "chromeOptions" : {
-    "prefs" : {
-      "credentials_enable_service" : false,
-      "profile.password_manager_enabled" : false
+{
+  "capabilities": [
+    {
+      "browserName": "chrome",
+      "chromeOptions": {
+            "args": ["--no-sandbox"]
+       }
     }
-  }
+  ]
 }
+
