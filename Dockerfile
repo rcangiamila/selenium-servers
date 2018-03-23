@@ -11,6 +11,7 @@ ENV NAME=selenium-server-standalone \
 
 ENV APP_HOME=/opt/selenium
 ENV HOME=${APP_HOME}
+ENV GOOGLE_HOME=/opt/google
 ENV PATH=$PATH:${APP_HOME}/bin
 
 ENV GECKO_DRIVER_URL=https://github.com/mozilla/geckodriver/releases/download/v0.20.0/geckodriver-v0.20.0-linux64.tar.gz
@@ -41,15 +42,14 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
     tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
     wget --no-verbose -L -O chromedriver_linux64.zip ${CHROME_DRIVER_URL} && \
-    unzip chromedriver_linux64.zip -d ${APP_HOME}/chromedriver && \
+    unzip chromedriver_linux64.zip -d /usr/lib64/chromium-browser && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
+    chown -R 1001:0 ${GOOGLE_HOME} && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
-    #ln -sf ${APP_HOME}/chromedriver/chromedriver /usr/lib64/chromium-browser/chromedriver && \
-    ln -sf ${APP_HOME}/chromedriver/chromedriver /usr/bin/chromedriver && \
-    #ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
+    ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2 && \
     rm -f chromedriver_linux64.zip
