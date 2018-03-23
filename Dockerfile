@@ -47,8 +47,9 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     chmod -R g=u /etc/passwd && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
-    ln -sf ${APP_HOME}/chromedriver/chromedriver /usr/lib64/chromium-browser/chromedriver && \
-    ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
+    #ln -sf ${APP_HOME}/chromedriver/chromedriver /usr/lib64/chromium-browser/chromedriver && \
+    ln -sf ${APP_HOME}/chromedriver/chromedriver /usr/bin/chromedriver && \
+    #ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2 && \
     rm -f chromedriver_linux64.zip
