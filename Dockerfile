@@ -26,9 +26,8 @@ RUN yum install -y epel-release
 
 #RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb chromedriver scl-utils dbus && \
 RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb scl-utils dbus && \
-    yum clean all 
-    #&& \
-    #dbus-uuidgen > /var/lib/dbus/machine-id
+    yum clean all && \
+    dbus-uuidgen > /etc/machine-id
 
 RUN mkdir -p ${APP_HOME} && \
     mkdir -p ${APP_HOME}/bin && \
