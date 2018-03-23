@@ -10,7 +10,6 @@ ENV NAME=selenium-server-standalone \
     VERSION=0
 
 ENV APP_HOME=/opt/selenium
-ENV GOOGLE_HOME=/opt/google
 ENV HOME=${APP_HOME}
 ENV PATH=$PATH:${APP_HOME}/bin
 
@@ -36,14 +35,11 @@ COPY bin/ ${APP_HOME}/bin
 RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     wget --no-verbose -L -O firefox.tar.bz2 ${FIREFOX_URL} &&  \
     tar -xvf firefox.tar.bz2 -C ${APP_HOME} && \
-    #wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
-    #tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
+    wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
+    tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
-    ##TEST
-    wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
-    tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
