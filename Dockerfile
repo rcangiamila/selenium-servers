@@ -10,6 +10,7 @@ ENV NAME=selenium-server-standalone \
     VERSION=0
 
 ENV APP_HOME=/opt/selenium
+ENV GOOGLE_HOME=/opt/google
 ENV HOME=${APP_HOME}
 ENV PATH=$PATH:${APP_HOME}/bin
 
@@ -44,6 +45,7 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     unzip chromedriver_linux64.zip -d /usr/lib64/chromium-browser && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
+    chown -R 1001:0 ${GOOGLE_HOME} && \
     chmod -R g=u /etc/passwd && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
