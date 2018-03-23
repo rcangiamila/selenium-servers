@@ -50,7 +50,9 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2 && \
-    rm -f chromedriver_linux64.zip
+    rm -f chromedriver_linux64.zip && \
+    rm -f /usr/bin/google-chrome && \
+    cp ${APP_HOME}/bin/google-chrome /usr/bin/
 
 USER 1001
 
