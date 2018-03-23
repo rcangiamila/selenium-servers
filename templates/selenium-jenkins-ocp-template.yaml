@@ -37,11 +37,29 @@ objects:
       kind: Service
       name: ${JENKINS_SERVICE_NAME}
 - apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: ${SELENIUM_SERVICE_NAME}
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${SELENIUM_SERVICE_NAME}      
+- apiVersion: v1
   kind: ImageStream
   metadata:
     labels:
       application: jenkins-ext
     name: jenkins-ext
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      application: selenium-servers
+    name: selenium-servers
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -61,16 +79,56 @@ objects:
     resources: {}
     runPolicy: Serial
     source:
-      contextDir: ${CONTEXT_DIR}
+      contextDir: ${JENKINS_EXT_CONTEXT_DIR}
       git:
-        uri: ${SOURCE_REPOSITORY_URL}
+        uri: ${JENKINS_EXT_SOURCE_REPOSITORY_URL}
       type: Git
     strategy:
       dockerStrategy:
+        dockerfilePath: ${JENKINS_EXT_DOCKERFILE}
         from:
           kind: ImageStreamTag
           name: jenkins:latest
           namespace: ${NAMESPACE}
+      type: Docker
+    triggers:
+      - github:
+          secret: O6xJHmb-YAIiDPxoRrtH
+        type: GitHub
+      - generic:
+          secret: gxIn3u86-kvq74eCzYtq
+        type: Generic
+      - imageChange: {}
+        type: ImageChange
+      - type: ConfigChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: selenium-servers
+    name: selenium-servers
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: selenium-servers:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      contextDir: ${SELENIUM_CONTEXT_DIR}
+      git:
+        uri: ${SELENIUM_SOURCE_REPOSITORY_URL}
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: ${SELENIUM_DOCKERFILE}
       type: Docker
     triggers:
       - github:
@@ -108,12 +166,12 @@ objects:
             value: ${ENABLE_OAUTH}
           - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
             value: "true"
-          - name: OPENSHIFT_JENKINS_JVM_ARCH
-            value: ${JVM_ARCH}
           - name: KUBERNETES_MASTER
             value: https://kubernetes.default:443
           - name: KUBERNETES_TRUST_CERTIFICATES
             value: "true"
+          - name: JENKINS_SERVICE_NAME
+            value: ${JENKINS_SERVICE_NAME}
           - name: JNLP_SERVICE_NAME
             value: ${JNLP_SERVICE_NAME}
           image: ' '
@@ -130,7 +188,7 @@ objects:
             httpGet:
               path: /login
               port: 8080
-            initialDelaySeconds: 3
+            initialDelaySeconds: 420
             timeoutSeconds: 3
           resources:
             limits:
@@ -157,6 +215,51 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${JENKINS_IMAGE_STREAM_TAG}
+        lastTriggeredImage: ""
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: ${SELENIUM_SERVICE_NAME}
+  spec:
+    replicas: 1
+    selector:
+      name: ${SELENIUM_SERVICE_NAME}
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: ${SELENIUM_SERVICE_NAME}
+      spec:
+        containers:
+        - capabilities: {}
+          image: ' '
+          imagePullPolicy: Always          
+          name: ${SELENIUM_SERVICE_NAME}
+          resources: {}          
+          securityContext: {}
+          ports:
+            - containerPort: 5555
+              protocol: TCP
+            - containerPort: 4444
+              protocol: TCP          
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst          
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - selenium-servers
+        from:
+          kind: ImageStreamTag
+          name: ${SELENIUM_IMAGE_STREAM_TAG}
         lastTriggeredImage: ""
       type: ImageChange
     - type: ConfigChange
@@ -211,11 +314,54 @@ objects:
       name: ${JENKINS_SERVICE_NAME}
     sessionAffinity: None
     type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${SELENIUM_SLAVE_SERVICE_NAME}
+  spec:
+    ports:
+    - name: 5555-tcp
+      nodePort: 0
+      port: 5555
+      protocol: TCP
+      targetPort: 5555      
+    selector:
+      name: ${SELENIUM_SERVICE_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${SELENIUM_SERVICE_NAME}
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name": "${SELENIUM_SLAVE_SERVICE_NAME}",
+        "namespace": "", "kind": "Service"}]'
+      service.openshift.io/infrastructure: "true"
+    creationTimestamp: null    
+  spec:
+    ports:
+    - name: 4444-tcp
+      nodePort: 0
+      port: 4444
+      protocol: TCP
+      targetPort: 4444
+    selector:
+      name: ${SELENIUM_SERVICE_NAME}
+    sessionAffinity: None
+    type: ClusterIP        
 parameters:
 - description: The name of the OpenShift Service exposed for the Jenkins container.
   displayName: Jenkins Service Name
   name: JENKINS_SERVICE_NAME
   value: jenkins
+- description: The name of the OpenShift Service exposed for the Selenium container.
+  displayName: Selenium Service Name
+  name: SELENIUM_SERVICE_NAME
+  value: selenium-servers
+- description: The name of the OpenShift Service Slave exposed for the Selenium container.
+  displayName: Selenium Slave Service Name
+  name: SELENIUM_SLAVE_SERVICE_NAME
+  value: selenium-servers-slave  
 - description: The name of the service used for master/slave communication.
   displayName: Jenkins JNLP Service Name
   name: JNLP_SERVICE_NAME
@@ -246,13 +392,37 @@ parameters:
   displayName: Jenkins ImageStreamTag
   name: JENKINS_IMAGE_STREAM_TAG
   value: jenkins-ext:latest
-- description: Base path of the git repository.
-  displayName: Context Dir
-  name: CONTEXT_DIR
+- description: Name of the ImageStreamTag to be used for the Selenium image.
+  displayName: Selenium ImageStreamTag
+  name: SELENIUM_IMAGE_STREAM_TAG
+  value: selenium-servers:latest
+- description: Base path of the Selenium git repository.
+  displayName: Selenium Context Dir
+  name: SELENIUM_CONTEXT_DIR
+  value: /
+  required: true
+- description: Selenium GIT repository URL.
+  displayName: Selenium Source repository URL
+  name: SELENIUM_SOURCE_REPOSITORY_URL
+  value: https://github.com/rcangiamila/selenium-servers.git
+  required: true
+- description: Selenium Dockerfile Name
+  displayName: Selenium Dockerfile Name
+  name: SELENIUM_DOCKERFILE
+  value: Dockerfile
+  required: true
+- description: Jenkins-EXT Base path of the git repository.
+  displayName: Jenkins-EXT Context Dir
+  name: JENKINS_EXT_CONTEXT_DIR
   value: console-jenkins
   required: true
-- description: GIT repository URL.
-  displayName: Source repository URL
-  name: SOURCE_REPOSITORY_URL
+- description: Jenkins-EXT GIT repository URL.
+  displayName: Jenkins-EXT Source repository URL
+  name: JENKINS_EXT_SOURCE_REPOSITORY_URL
   value: https://github.com/rcangiamila/selenium-servers.git
+  required: true
+- description: Jenkis-EXT Dockerfile Name
+  displayName: Jenkis-EXT Dockerfile Name
+  name: JENKINS_EXT_DOCKERFILE
+  value: Dockerfile
   required: true

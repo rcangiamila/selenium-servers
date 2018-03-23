@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: '2018-03-20T17:33:23Z'
+  labels:
+    app: ci-base
+    template: jenkins-persistent-extends-template
+  name: ci-base
+  namespace: selenium-test-partec
+  resourceVersion: '82233'
+  selfLink: /oapi/v1/namespaces/selenium-test-partec/buildconfigs/ci-base
+  uid: ca75f935-2c64-11e8-a164-001a4a00084b
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: DockerImage
+      name: 'docker-registry.default.svc:5000/selenium-test-partec/ci-base:latest'
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: console-jenkins
+    git:
+      uri: 'https://github.com/rcangiamila/selenium-servers.git'
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'jenkins:latest'
+        namespace: openshift
+    type: Docker
+  triggers:
+    - github:
+        secret: O6xJHmb-YAIiDPxoRrtH
+      type: GitHub
+    - generic:
+        secret: gxIn3u86-kvq74eCzYtq
+      type: Generic
+    - imageChange:
+        lastTriggeredImageID: >-
+          openshift/jenkins-2-centos7@sha256:742d58c1b1d0c94aa32461db7840e457109a5b3f94849c52feecbc71935bef2a
+      type: ImageChange
+    - type: ConfigChange
+status:
+  lastVersion: 2
+

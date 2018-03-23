@@ -37,6 +37,16 @@ objects:
       kind: Service
       name: ${JENKINS_SERVICE_NAME}
 - apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${JENKINS_SERVICE_NAME}
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
+- apiVersion: v1
   kind: ImageStream
   metadata:
     labels:
@@ -125,7 +135,7 @@ objects:
               port: 8080
             initialDelaySeconds: 420
             timeoutSeconds: 3
-          name: jenkins
+          name: jenkins-ext
           readinessProbe:
             httpGet:
               path: /login
@@ -146,14 +156,14 @@ objects:
         restartPolicy: Always
         serviceAccountName: ${JENKINS_SERVICE_NAME}
         volumes:
-        - emptyDir: {} 
-          name: ${JENKINS_SERVICE_NAME}-data
-    test: false
+        - name: ${JENKINS_SERVICE_NAME}-data
+          persistentVolumeClaim:
+            claimName: ${JENKINS_SERVICE_NAME}
     triggers:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - jenkins
+        - jenkins-ext
         from:
           kind: ImageStreamTag
           name: ${JENKINS_IMAGE_STREAM_TAG}
@@ -215,11 +225,11 @@ parameters:
 - description: The name of the OpenShift Service exposed for the Jenkins container.
   displayName: Jenkins Service Name
   name: JENKINS_SERVICE_NAME
-  value: jenkins
+  value: jenkins-ext
 - description: The name of the service used for master/slave communication.
   displayName: Jenkins JNLP Service Name
   name: JNLP_SERVICE_NAME
-  value: jenkins-jnlp
+  value: jenkins-ext-jnlp
 - description: Whether to enable OAuth OpenShift integration. If false, the static
     account 'admin' will be initialized with the password 'password'.
   displayName: Enable OAuth in Jenkins

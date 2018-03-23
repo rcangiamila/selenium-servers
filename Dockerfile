@@ -11,7 +11,6 @@ ENV NAME=selenium-server-standalone \
 
 ENV APP_HOME=/opt/selenium
 ENV HOME=${APP_HOME}
-ENV GOOGLE_HOME=/opt/google
 ENV PATH=$PATH:${APP_HOME}/bin
 
 ENV GECKO_DRIVER_URL=https://github.com/mozilla/geckodriver/releases/download/v0.20.0/geckodriver-v0.20.0-linux64.tar.gz
@@ -46,7 +45,6 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
-    chown -R 1001:0 ${GOOGLE_HOME} && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
     ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
