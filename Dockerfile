@@ -41,7 +41,7 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
     tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
     wget --no-verbose -L -O chromedriver_linux64.zip ${CHROME_DRIVER_URL} && \
-    unzip chromedriver_linux64.zip -d chromedriver && \
+    unzip chromedriver_linux64.zip -d ${APP_HOME}/chromedriver && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
