@@ -45,17 +45,15 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     unzip chromedriver_linux64.zip -d /usr/lib64/chromium-browser && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
-    chmod -R a+rwx ${GOOGLE_HOME} && \
     chown -R 1001:0 ${GOOGLE_HOME} && \
+    chmod 4755 ${GOOGLE_HOME}/chrome/chrome-sandbox && \
     chmod -R g=u /etc/passwd && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
     ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2 && \
-    rm -f chromedriver_linux64.zip && \
-    rm -f /usr/bin/google-chrome && \
-    cp ${APP_HOME}/bin/google-chrome /usr/bin/
+    rm -f chromedriver_linux64.zip
 
 USER 1001
 
