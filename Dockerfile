@@ -15,8 +15,8 @@ ENV PATH=$PATH:${APP_HOME}/bin
 
 ENV GECKO_DRIVER_URL=https://github.com/mozilla/geckodriver/releases/download/v0.20.0/geckodriver-v0.20.0-linux64.tar.gz
 ENV CHROME_DRIVER_URL=https://chromedriver.storage.googleapis.com/2.37/chromedriver_linux64.zip
-#ENV CHROME_URL=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-ENV CHROME_URL=http://dist.control.lth.se/public/CentOS-7/x86_64/google.x86_64/Packages/google-chrome-stable-64.0.3282.186-1.x86_64.rpm
+ENV CHROME_URL=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+#ENV CHROME_URL=http://dist.control.lth.se/public/CentOS-7/x86_64/google.x86_64/Packages/google-chrome-stable-64.0.3282.186-1.x86_64.rpm
 ENV SELENIUM_URL=https://selenium-release.storage.googleapis.com/3.11/selenium-server-standalone-3.11.0.jar
 ENV FIREFOX_URL=https://download-installer.cdn.mozilla.net/pub/firefox/releases/59.0/linux-x86_64/en-US/firefox-59.0.tar.bz2
 
@@ -26,8 +26,9 @@ RUN yum install -y epel-release
 
 #RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb chromedriver scl-utils dbus && \
 RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb scl-utils dbus && \
-    yum clean all && \
-    dbus-uuidgen > /var/lib/dbus/machine-id
+    yum clean all 
+    #&& \
+    #dbus-uuidgen > /var/lib/dbus/machine-id
 
 RUN mkdir -p ${APP_HOME} && \
     mkdir -p ${APP_HOME}/bin && \
@@ -50,9 +51,10 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     ln -sf /usr/lib64/chromium-browser/chromedriver /usr/bin/chromedriver && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2 && \
-    rm -f chromedriver_linux64.zip && \
-    rm -f /usr/bin/google-chrome && \
-    cp ${APP_HOME}/bin/google-chrome /usr/bin/
+    rm -f chromedriver_linux64.zip 
+    #&& \
+    #rm -f /usr/bin/google-chrome && \
+    #cp ${APP_HOME}/bin/google-chrome /usr/bin/
 
 USER 1001
 
