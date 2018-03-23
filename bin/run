@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec xvfb-run java -Dwebdriver.chrome.args="--no-sandbox" -jar /opt/selenium/standalone.jar
+exec xvfb-run java -jar -Dwebdriver.chrome.args="--no-sandbox" -Dselenium.chrome.args="--no-sandbox" /opt/selenium/standalone.jar
