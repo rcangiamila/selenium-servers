@@ -40,7 +40,7 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     rm /usr/bin/google-chrome && \
     rm /etc/alternatives/google-chrome && \
     rm /usr/bin/google-chrome-stable && \
-    mv /opt/google ${APP_HOME} && \
+    cp -pa /opt/google ${APP_HOME} && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
