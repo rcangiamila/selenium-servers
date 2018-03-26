@@ -41,7 +41,7 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
     mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome.old && \
-    cp ${APP_HOME}/bin /opt/google/chrome/google-chrome && \
+    cp ${APP_HOME}/bin/google-chrome /opt/google/chrome/google-chrome && \
     chmod -R a+rwx /opt/google/chrome/google-chrome && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
