@@ -22,7 +22,7 @@ ENV DISPLAY=:99
 
 RUN yum install -y epel-release
 
-RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb chromedriver scl-utils dbus && \
+RUN yum install -y --setopt=tsflags=nodocs ${CHROME_URL} gettext nss_wrapper wget bzip2 java-1.8.0-openjdk which unzip tar Xvfb chromedriver scl-utils dbus strace && \
     yum clean all && \
     dbus-uuidgen > /etc/machine-id
 
@@ -37,16 +37,11 @@ RUN wget --no-verbose ${SELENIUM_URL} -O ${APP_HOME}/standalone.jar && \
     tar -xvf firefox.tar.bz2 -C ${APP_HOME} && \
     wget --no-verbose -L -O geckodriver-v0.20.0-linux64.tar.gz ${GECKO_DRIVER_URL} && \
     tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C ${APP_HOME}/geckodriver && \
-    rm /usr/bin/google-chrome && \
-    rm /etc/alternatives/google-chrome && \
-    rm /usr/bin/google-chrome-stable && \
-    cp -pa /opt/google ${APP_HOME} && \
     chmod -R a+rwx ${APP_HOME} && \
     chown -R 1001:0 ${APP_HOME} && \
     chmod -R g=u /etc/passwd && \
     ln -sf ${APP_HOME}/geckodriver/geckodriver /usr/bin/geckodriver && \
     ln -sf ${APP_HOME}/firefox/firefox /usr/bin/firefox && \
-    ln -sf ${APP_HOME}/google/chrome/google-chrome /usr/bin/google-chrome && \
     rm -f geckodriver-v0.20.0-linux64.tar.gz && \
     rm -f firefox.tar.bz2
 
